@@ -3,7 +3,8 @@
     "directories": {},
     "dependencies": {
       "handlebars": "github:components/handlebars.js@^3.0.3",
-      "jquery": "github:components/jquery@^2.1.4"
+      "jquery": "github:components/jquery@^2.1.4",
+      "lodash": "npm:lodash@^3.10.0"
     },
     "devDependencies": {
       "traceur": "github:jmcriffey/bower-traceur@0.0.88",
