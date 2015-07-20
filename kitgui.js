@@ -10866,9 +10866,11 @@ System.register("lib/main", ["github:components/jquery@2.1.4", "npm:lodash@3.10.
     execute: function() {
       ;
       kitgui = {
-        showLogin: login.showLogin,
-        hideLogin: login.hideLogin,
-        setConfig: setConfig,
+        login: {
+          show: login.showLogin,
+          hide: login.hideLogin
+        },
+        config: {set: setConfig},
         init: init
       };
       (function(define) {
