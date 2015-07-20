@@ -10759,12 +10759,18 @@ System.register("lib/login/login", ["github:components/jquery@2.1.4"], function(
   function init() {
     console.log('login init');
   }
+  function showLogin() {}
+  function hideLogin() {}
   return {
     setters: [function($__m) {
       $ = $__m.default;
     }],
     execute: function() {
-      $__export('default', {init: init});
+      $__export('default', {
+        init: init,
+        showLogin: showLogin,
+        hideLogin: hideLogin
+      });
     }
   };
 });
@@ -10829,7 +10835,8 @@ System.register("lib/main", ["github:components/jquery@2.1.4", "npm:lodash@3.10.
       config,
       editor,
       login,
-      session;
+      session,
+      kitgui;
   function setConfig(newConfig) {
     _.assign(config, newConfig);
   }
@@ -10858,10 +10865,15 @@ System.register("lib/main", ["github:components/jquery@2.1.4", "npm:lodash@3.10.
     }],
     execute: function() {
       ;
+      kitgui = {
+        showLogin: login.showLogin,
+        hideLogin: login.hideLogin,
+        setConfig: setConfig,
+        init: init
+      };
       (function(define) {
         define('kitgui', function(require, exports) {
-          exports.setConfig = setConfig;
-          exports.init = init;
+          _.assign(exports, kitgui);
         });
       }(typeof define === 'function' && define.amd ? define : function(id, factory) {
         if (typeof exports !== 'undefined') {
