@@ -6,4 +6,6 @@ This client-side library enables the editing experience and interfaces with the 
 
 This uses jspm for package management. Please refer to jspm.io for more information. This is a standalone script injected onto a page so must be used with the 
 
-```$ jspm bundle-sfx lib/main kitgui.js
+```
+$ jspm bundle-sfx lib/main kitgui.js
+```
