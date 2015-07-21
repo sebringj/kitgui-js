@@ -9,3 +9,7 @@ This uses jspm for package management. Please refer to jspm.io for more informat
 ```
 $ jspm bundle-sfx lib/main kitgui.js
 ```
+or to minify
+```
+$ jspm bundle-sfx lib/main --minify kitgui.js
+```
