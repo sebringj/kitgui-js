@@ -15275,16 +15275,26 @@ System.register("lib/login/login", ["github:components/jquery@2.1.4", "lib/login
   var __moduleName = "lib/login/login";
   var $,
       templates,
-      injected;
+      injected,
+      $login;
   function init() {
     if (!injected) {
       $('head').append(templates.login.style({}));
       $('body').append(templates.login.markup({}));
       injected = true;
+      $login = $('#kitgui-login-markup');
     }
   }
-  function showLogin() {}
-  function hideLogin() {}
+  function showLogin() {
+    if (!injected)
+      throw 'kitgui.init must be called first';
+    $login.addClass('kitgui-visible');
+  }
+  function hideLogin() {
+    if (!injected)
+      throw 'kitgui.init must be called first';
+    $login.removeClass('kitgui-visible');
+  }
   return {
     setters: [function($__m) {
       $ = $__m.default;
