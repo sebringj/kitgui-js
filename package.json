@@ -1,10 +1,27 @@
 {
+  "name": "kitgui",
+  "description": "kitgui injectable content managment tool",
+  "keywords": [
+    "kitgui", "cms", "content management"
+  ],
+  "version": "2.0.0",
+  "homepage": "https://github.com/sebringj/kitgui-js",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:sebringj/kitgui-js.git"
+  },
+  "main": "./kitgui.min.js",
+  "license": "MIT",
+  "scripts": {
+    "test": "mocha"
+  },
   "jspm": {
     "directories": {},
     "dependencies": {
       "handlebars": "github:components/handlebars.js@^3.0.3",
       "jquery": "github:components/jquery@^2.1.4",
-      "lodash": "npm:lodash@^3.10.0"
+      "lodash": "npm:lodash@^3.10.0",
+      "silver-bullet": "npm:silver-bullet@^0.0.4"
     },
     "devDependencies": {
       "traceur": "github:jmcriffey/bower-traceur@0.0.88",

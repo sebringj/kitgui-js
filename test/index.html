@@ -1,13 +1,16 @@
 <!doctype html>
 <html>
-	<head>
-		<title>test kitgui</title>
-	</head>
-	<body>
-		<div kitgui-id="test" kitgui-type="inline-text">
-			testing 123
-		</div>
-		<script src="../kitgui.js"></script>
-		<script> kitgui.init(); </script>
-	</body>
+  <head>
+    <title>test kitgui</title>
+  </head>
+  <body>
+    <div kitgui-id="test" kitgui-type="inline-text">
+      testing 123
+    </div>
+    <script src="../kitgui.js"></script>
+    <script>
+      kitgui.config.set('baseUrl', 'http://localhost:3000');
+      kitgui.init();
+    </script>
+  </body>
 </html>
