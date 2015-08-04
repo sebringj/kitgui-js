@@ -2,7 +2,9 @@
   "name": "kitgui",
   "description": "kitgui injectable content managment tool",
   "keywords": [
-    "kitgui", "cms", "content management"
+    "kitgui",
+    "cms",
+    "content management"
   ],
   "version": "2.0.0",
   "homepage": "https://github.com/sebringj/kitgui-js",

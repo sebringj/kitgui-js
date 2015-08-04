@@ -15231,8 +15231,8 @@ System.register("lib/login/templates", ["github:components/handlebars.js@3.0.3"]
       handlbars = $__m.default;
     }],
     execute: function() {
-      style = "\n\t<style id=\"kitgui-login-style\">\n\t\t#kitgui-login {\n\t\t\tdisplay: none;\n\t\t\tposition: absolute;\n\t\t}\n\t</style>\n";
-      markup = "\n\t<div id=\"kitgui-login-markup\">\n\t\t<form>\n\n\t\t</form>\n\t</div>\n";
+      style = "\n  <style id=\"kitgui-login-style\">\n    #kitgui-login-markup {\n      display: none;\n      position: fixed;\n      top: 0;\n      left: 0;\n      width: 100%;\n      height: 100%;\n      z-index: 2147483647;\n      background-color: rgba(255, 255, 255, 0.5);\n      border: none;\n    }\n    #kitgui-login-markup.show {\n      display: -webkit-flex;\n      display: flex;\n      -webkit-flex-direction: row;\n      flex-direction: row;\n      -webkit-justify-content: center;\n      justify-content: center;\n      -webkit-align-items: center;\n      align-items: center;\n    }\n    #kitgui-login-markup iframe {\n      width: 300px;\n      height: 300px;\n      border: none;\n    }\n  </style>\n";
+      markup = "\n  <div id=\"kitgui-login-markup\">\n    <iframe src=\"{{baseUrl}}/signIn\"></iframe>\n  </div>\n";
       templates = {login: {
           style: handlbars.compile(style),
           markup: handlbars.compile(markup)
@@ -15270,17 +15270,18 @@ System.register("lib/utils/session", [], function($__export) {
   };
 });
 
-System.register("lib/login/login", ["github:components/jquery@2.1.4", "lib/login/templates"], function($__export) {
+System.register("lib/login/login", ["github:components/jquery@2.1.4", "lib/login/templates", "lib/utils/config"], function($__export) {
   "use strict";
   var __moduleName = "lib/login/login";
   var $,
       templates,
+      config,
       injected,
       $login;
   function init() {
     if (!injected) {
       $('head').append(templates.login.style({}));
-      $('body').append(templates.login.markup({}));
+      $('body').append(templates.login.markup({baseUrl: config.baseUrl}));
       injected = true;
       $login = $('#kitgui-login-markup');
     }
@@ -15288,18 +15289,20 @@ System.register("lib/login/login", ["github:components/jquery@2.1.4", "lib/login
   function showLogin() {
     if (!injected)
       throw 'kitgui.init must be called first';
-    $login.addClass('kitgui-visible');
+    $login.addClass('show');
   }
   function hideLogin() {
     if (!injected)
       throw 'kitgui.init must be called first';
-    $login.removeClass('kitgui-visible');
+    $login.removeClass('show');
   }
   return {
     setters: [function($__m) {
       $ = $__m.default;
     }, function($__m) {
       templates = $__m.default;
+    }, function($__m) {
+      config = $__m.default;
     }],
     execute: function() {
       injected = false;
@@ -15326,10 +15329,10 @@ System.register("lib/editor/templates", ["github:components/handlebars.js@3.0.3"
       handlbars = $__m.default;
     }],
     execute: function() {
-      navStyle = "\n\t<style id=\"kitgui-nav-style\">\n\t\t#kitgui-nav {\n\t\t\tdisplay:none;\n\t\t}\n\t</style>\n";
-      navMarkup = "\n\t<div id=\"kitgui-nav-markup\">\n\t\t<form>\n\n\t\t</form>\n\t</div>\n";
-      overlayStyle = "\n\t<style id=\"kitgui-overlay-style\">\n\t\t.kitgui-overlay {\n\t\t\tdisplay:none;\n\t\t}\n\t</style>\n";
-      overlayMarkup = "\n\t<div class=\"kitgui-overlay\">\n\n\t</div>\n";
+      navStyle = "\n  <style id=\"kitgui-nav-style\">\n    #kitgui-nav {\n      display:none;\n    }\n  </style>\n";
+      navMarkup = "\n  <div id=\"kitgui-nav-markup\">\n    <form>\n\n    </form>\n  </div>\n";
+      overlayStyle = "\n  <style id=\"kitgui-overlay-style\">\n    .kitgui-overlay {\n      display:none;\n    }\n  </style>\n";
+      overlayMarkup = "\n  <div class=\"kitgui-overlay\">\n\n  </div>\n";
       templates = {
         nav: {
           style: handlbars.compile(navStyle),
@@ -15353,15 +15356,22 @@ System.register("lib/editor/editor", ["github:components/jquery@2.1.4", "lib/uti
       mouseover,
       mouseout,
       templates,
-      injected;
+      injected,
+      eventPostFix,
+      selector,
+      $nav;
+  function postFix(name) {
+    return name + eventPostFix;
+  }
   function init() {
     if (!injected) {
       $('head').append(templates.nav.style());
       $('body').append(templates.nav.markup());
       $('head').append(templates.overlay.style());
+      $nav = $('#kitgui-nav-markup');
       injected = true;
     }
-    $('body').off('.kitgui').on('mouseenter.kitgui', '[kitgui-id],[data-kitgui-id]', mouseover).on('mouseout.kitgui', '[kitgui-id],[data-kitgui-id]', mouseout);
+    $('body').off(eventPostFix).on(postFix('mouseenter'), selector, mouseover).on(postFix('mouseout'), selector, mouseout);
   }
   return {
     setters: [function($__m) {
@@ -15377,6 +15387,8 @@ System.register("lib/editor/editor", ["github:components/jquery@2.1.4", "lib/uti
     }],
     execute: function() {
       injected = false;
+      eventPostFix = '.kitgui-editor';
+      selector = '[kitgui-id],[data-kitgui-id]';
       $__export('default', {init: init});
     }
   };
@@ -15392,15 +15404,18 @@ System.register("lib/main", ["npm:lodash@3.10.0", "lib/utils/state", "lib/utils/
       login,
       session,
       kitgui;
-  function setConfig(newConfig) {
-    _.assign(config, newConfig);
+  function setConfig(key, value) {
+    if (typeof key === 'string')
+      config[key] = value;
+  }
+  function getConfig(key) {
+    return config[key];
   }
   function init() {
-    if (session.get('authenticated')) {
+    if (session.get('authenticated'))
       editor.init();
-    } else {
+    else
       login.init();
-    }
   }
   return {
     setters: [function($__m) {
@@ -15423,7 +15438,10 @@ System.register("lib/main", ["npm:lodash@3.10.0", "lib/utils/state", "lib/utils/
           show: login.showLogin,
           hide: login.hideLogin
         },
-        config: {set: setConfig},
+        config: {
+          set: setConfig,
+          get: getConfig
+        },
         init: init
       };
       (function(define) {
